@@ -395,8 +395,12 @@ function Find-CertificateAuthority
     {
         if (-not $caFound)
         {
-            $caServerFQDN = ($item.distinguishedName -split '=|,')[1]
             $caRootName = ($item.Children.distinguishedName -split '=|,')[1]
+            #Calculate the ServerFQDN
+            $caServerDN = ($item.distinguishedName -split '=|,')[1]
+            $domainPart = $item.distinguishedName.Substring($item.distinguishedName.ToString().IndexOf('DC='))
+            $domain = $domainPart.Replace('DC=','').Replace(',','.')
+            $caServerFQDN = $caServerDN + '.' + $domain
 
             $certificateAuthority = [PSObject] @{
                 CARootName   = $caRootName
