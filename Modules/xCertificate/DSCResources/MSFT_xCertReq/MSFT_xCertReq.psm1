@@ -368,6 +368,16 @@ function Set-TargetResource
 
     $ca = "$CAServerFQDN\$CARootName"
 
+    #A way to use local hostname + domain as Subject without specifying the name to the Resource
+    if ($Subject.ToLower() -eq 'localhost') {
+        $compDomain = (Get-WmiObject -Class Win32_ComputerSystem).Domain
+        if ($compDomain.Contains('.')) {
+            $Subject = (hostname) + '.' + $compDomain
+        } else {
+            $Subject = (hostname)
+        }
+    }
+
     Write-Verbose -Message ( @(
             "$($MyInvocation.MyCommand): "
             $($LocalizedData.StartingCertReqMessage -f $Subject, $ca)
@@ -799,6 +809,16 @@ function Test-TargetResource
 
     $ca = "$CAServerFQDN\$CARootName"
 
+    #A way to use local hostname + domain as Subject without specifying the name to the Resource
+    if ($Subject.ToLower() -eq 'localhost') {
+        $compDomain = (Get-WmiObject -Class Win32_ComputerSystem).Domain
+        if ($compDomain.Contains('.')) {
+            $Subject = (hostname) + '.' + $compDomain
+        } else {
+            $Subject = (hostname)
+        }
+    }
+
     # If the Subject does not contain a full X500 path, construct just the CN
     if (($Subject.split('=').count) -eq 1)
     {
@@ -905,7 +925,9 @@ function Test-TargetResource
             }
         }
 
-        if ($CertificateTemplate -ne (Get-CertificateTemplateName -Certificate $cert))
+
+        #Hotfix for Difference in DisplayName and TemplateName, where Windows usually just removes Spaces from the DisplayName to generate the TemplateName
+        if ($CertificateTemplate -ne (Get-CertificateTemplateName -Certificate $cert).Replace(' ',''))
         {
             Write-Verbose -Message ( @(
                     "$($MyInvocation.MyCommand): "
