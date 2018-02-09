@@ -11,8 +11,8 @@ ConvertFrom-StringData @'
     StartPingCAMessage                  = Starting to ping CA.
     NoCaFoundError                      = No Certificate Authority could be found.
     CaPingMessage                       = certutil exited with code {0} and the following output: {1}
-    CaFoundMessage                      = Found certificate authority '{0}\{1}'.
-    CaOnlineMessage                     = Certificate authority '{0}\{1}' is online.
-    CaOfflineMessage                    = Certificate authority '{0}\{1}' is offline.
+    CaFoundMessage                      = Found certificate authority '{0}\\{1}'.
+    CaOnlineMessage                     = Certificate authority '{0}\\{1}' is online.
+    CaOfflineMessage                    = Certificate authority '{0}\\{1}' is offline.
     TemplateNameResolutionError         = Failed to resolve the template name in Active Directory: {0}
 '@
